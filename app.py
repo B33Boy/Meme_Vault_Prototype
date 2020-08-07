@@ -7,9 +7,11 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
-# Flask Extensions
+# Flask Global Extensions
 db = SQLAlchemy()
 migrate = Migrate()
+login = LoginManager()
+
 
 def create_app(test_config=None):
 
@@ -29,8 +31,9 @@ def create_app(test_config=None):
     Bootstrap(app)
     db.init_app(app)
     migrate.init_app(app, db)
-
-
+    login.init_app(app)
+    login.login_view = 'login_bp.login'
+    
     # Blueprint imports
     from application.general.general import general_bp
     from application.login.login import login_bp

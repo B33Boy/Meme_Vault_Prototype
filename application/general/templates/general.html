@@ -3,5 +3,18 @@
 {% block page_name %}Index{% endblock %}
 
 {% block page_content %}
-    <h3>TEST PAGE</h3>
+  <h1>Hi, {{ current_user.username }}!</h1>
+  {% for post in posts %}
+  <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+  {% endfor %}
+
+  <div>
+      Microblog:
+      <a href="{{ url_for('general_bp.index') }}">Home</a>
+      {% if current_user.is_anonymous %}
+      <a href="{{ url_for('login_bp.login') }}">Login</a>
+      {% else %}
+      <a href="{{ url_for('login_bp.logout') }}">Logout</a>
+      {% endif %}
+  </div>
 {% endblock %}
