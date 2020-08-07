@@ -1,8 +1,15 @@
 import os
 from flask import Flask
+from config import Config
+
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
-from config import Config
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+# Flask Extensions
+db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app(test_config=None):
 
@@ -20,6 +27,8 @@ def create_app(test_config=None):
 
     # Flask extensions
     Bootstrap(app)
+    db.init_app(app)
+    migrate.init_app(app, db)
 
 
     # Blueprint imports
