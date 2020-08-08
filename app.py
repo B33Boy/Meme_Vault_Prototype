@@ -33,13 +33,13 @@ def create_app(test_config=None):
     migrate.init_app(app, db)
     login.init_app(app)
     login.login_view = 'login_bp.login'
-    
+
     # Blueprint imports
-    from application.general.general import general_bp
+    from application.main.main import main_bp
     from application.login.login import login_bp
 
     # Register blueprints
-    app.register_blueprint(general_bp)
+    app.register_blueprint(main_bp)
     app.register_blueprint(login_bp)
 
     return app

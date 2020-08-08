@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
 
 from .forms import LoginForm, RegistrationForm
-from ..general.models import User
+from ..main.models import User
 from app import db
 
 login_bp = Blueprint('login_bp', __name__, template_folder='templates', static_folder='static')
@@ -11,7 +11,7 @@ login_bp = Blueprint('login_bp', __name__, template_folder='templates', static_f
 @login_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('general_bp.index'))
+        return redirect(url_for('main_bp.index'))
 
     form = LoginForm()
 
@@ -29,7 +29,7 @@ def login():
         next_page = request.args.get('next')
 
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('general_bp.index')
+            next_page = url_for('main_bp.index')
 
         return redirect(next_page)
 
@@ -46,7 +46,7 @@ def logout():
 @login_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('general_bp.index'))
+        return redirect(url_for('main_bp.index'))
 
     form = RegistrationForm()
 
