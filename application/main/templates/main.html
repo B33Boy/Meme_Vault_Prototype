@@ -6,16 +6,18 @@
   <h1>Hi, {{ current_user.username }}!</h1>
   {% if post %}
     {% for post in posts %}
-      <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+      <div>
+        <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
+      </div>
     {% endfor %}
   {% endif %}
 
   <div>
-      {% if current_user.is_anonymous %}
-        <a href="{{ url_for('login_bp.login') }}">Login</a>
-      {% else %}
-        <a href="{{ url_for('login_bp.logout') }}">Logout</a>
-      {% endif %}
+    {% if current_user.is_anonymous %}
+      <a href="{{ url_for('login_bp.login') }}">Login</a>
+    {% else %}
+      <a href="{{ url_for('login_bp.logout') }}">Logout</a>
+    {% endif %}
   </div>
 
 {% endblock %}

@@ -6,10 +6,19 @@ from .forms import LoginForm, RegistrationForm
 from ..main.models import User
 from app import db
 
-login_bp = Blueprint('login_bp', __name__, template_folder='templates', static_folder='static')
+login_bp = Blueprint('login_bp', __name__,
+                     template_folder='templates', static_folder='static')
+
 
 @login_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    """Login blueprint, incorporates WTForms and Flask-Login.
+
+    Returns
+    -------
+    function
+        rendered template of login.html
+    """
     if current_user.is_authenticated:
         return redirect(url_for('main_bp.index'))
 
@@ -38,6 +47,14 @@ def login():
 
 @login_bp.route('/logout')
 def logout():
+    """Logout blueprint, incorporates Flask-Login
+
+    Returns
+    -------
+    function
+        redirects to login page
+
+    """
     logout_user()
 
     return redirect(url_for('login_bp.login'))
@@ -45,6 +62,14 @@ def logout():
 
 @login_bp.route('/register', methods=['GET', 'POST'])
 def register():
+    """Register user blueprint, incorporates WTForms and Flask-Login, and database.
+
+    Returns
+    -------
+    function
+        rendered template of register.html
+
+    """
     if current_user.is_authenticated:
         return redirect(url_for('main_bp.index'))
 

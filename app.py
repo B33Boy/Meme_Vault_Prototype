@@ -1,11 +1,11 @@
 import os
 from flask import Flask
-from config import Config
-
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
+from config import Config
 
 # Flask Global Extensions
 db = SQLAlchemy()
@@ -14,8 +14,20 @@ login = LoginManager()
 
 
 def create_app(test_config=None):
+    """Central function to instantiate flask app based on factory model to reduce circular dependencies.
+
+    Parameters
+    ----------
+    test_config : dict
+        used to manually override the config file
+
+    Returns
+    -------
+    flask app object
+    """
 
     app = Flask(__name__, instance_relative_config=True, template_folder='application/templates')
+
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
