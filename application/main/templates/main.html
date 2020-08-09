@@ -4,6 +4,27 @@
 
 {% block page_content %}
   <h1>Hi, {{ current_user.username }}!</h1>
+
+
+  {% include 'upload.html' %}
+
+{#
+  <form>
+    <div class="custom-file">
+      <input type="file" class="custom-file-input" id="customFile">
+      <label class="custom-file-label" for="customFile">Choose file</label>
+    </div>
+  </form>
+
+  <script>
+  // Add the following code if you want the name of the file appear on select
+  $(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+  </script>
+#}
+
   {% if post %}
     {% for post in posts %}
       <div>
@@ -11,6 +32,7 @@
       </div>
     {% endfor %}
   {% endif %}
+
 
   <div>
     {% if current_user.is_anonymous %}

@@ -18,7 +18,7 @@ def load_user(id):
         User object
 
     """
-return User.query.get(int(id))
+    return User.query.get(int(id))
 
 
 class User(UserMixin, db.Model):
