@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, current_app, request
+from flask import Blueprint, render_template, current_app, request, url_for, redirect, send_from_directory, flash
 from flask_login import login_required
 import os
 
 main_bp = Blueprint('main_bp', __name__,
-                    template_folder='templates', static_folder='static')
+                    template_folder='templates', static_folder='static', static_url_path='')
 
 
 @main_bp.route('/')
@@ -21,7 +21,15 @@ def index():
     posts = [{
     }]
 
-    return render_template("main.html", title='Home Page', posts=posts)
+    target = os.path.join(current_app.config['BASEDIR'], 'images/').replace("\\","/")
+    image_names = os.listdir(target)
+
+    return render_template("main.html", title='Home Page', posts=posts, image_names=image_names)
+
+
+@main_bp.route('/upload/<filename>')
+def send_image(filename):
+    return send_from_directory("images", filename)
 
 
 @main_bp.route('/about')
@@ -50,11 +58,24 @@ def upload():
         os.mkdir(target)
 
     for file in request.files.getlist('file'):
-        filename = file.filename
-        dest = '/'.join([target, filename])
-        file.save(dest)
 
-    return render_template('complete.html')
+        filename = file.filename
+        ext = os.path.splitext(filename)[1].lower()
+
+        if ext in current_app.config['EXT']:
+        # if (ext == ".jpg") or (ext == ".png"):
+            print("File supported moving on...")
+            dest = '/'.join([target, filename])
+            file.save(dest)
+
+        else:
+            # request.files.clear()
+
+            flash('Invalid file format', category='danger')
+
+
+
+    return redirect(url_for('main_bp.index'))
 
 
 

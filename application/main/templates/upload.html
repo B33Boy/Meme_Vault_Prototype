@@ -1,7 +1,22 @@
+{#
 <form id="upload-form" action="{{ url_for('main_bp.upload') }}" method="POST" enctype="multipart/form-data">
 
     <strong>Files:</strong><br>
     <input id="file-picker" type="file" name="file" accept="image/*" multiple>
     <div id="msg"></div>
     <input type="submit" value="Upload!" id="upload-button">
+</form>
+#}
+
+<form id="upload-form" action="{{ url_for('main_bp.upload') }}" method="POST" enctype="multipart/form-data">
+
+  <div class="form-group">
+    <div class="custom-file">
+      <input id="file-picker" type="file" class="custom-file-input" name="file" accept="image/*" multiple>
+      <label class="custom-file-label" for="image">Select image...</label>
+      <div id="msg"></div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Upload</button>
 </form>

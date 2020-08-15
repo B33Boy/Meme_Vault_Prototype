@@ -1,29 +1,22 @@
 {% extends "layout.html" %}
 
-{% block page_name %}Index{% endblock %}
+{% block head %}
+  <title>Main</title>
+  <script type="text/javascript" src="{{ url_for('main_bp.static', filename='upload-file.js') }}"></script>
+
+{% endblock %}
 
 {% block page_content %}
-  <h1>Hi, {{ current_user.username }}!</h1>
 
+  <h1>Hi, {{ current_user.username }}!</h1>
 
   {% include 'upload.html' %}
 
-{#
-  <form>
-    <div class="custom-file">
-      <input type="file" class="custom-file-input" id="customFile">
-      <label class="custom-file-label" for="customFile">Choose file</label>
-    </div>
-  </form>
-
-  <script>
-  // Add the following code if you want the name of the file appear on select
-  $(".custom-file-input").on("change", function() {
-    var fileName = $(this).val().split("\\").pop();
-    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-  });
-  </script>
-#}
+  <div>
+    {% if current_user.is_anonymous %}
+      <a href="{{ url_for('login_bp.login') }}">Login</a>
+    {% endif %}
+  </div>
 
   {% if post %}
     {% for post in posts %}
@@ -34,12 +27,20 @@
   {% endif %}
 
 
-  <div>
-    {% if current_user.is_anonymous %}
-      <a href="{{ url_for('login_bp.login') }}">Login</a>
-    {% else %}
-      <a href="{{ url_for('login_bp.logout') }}">Logout</a>
-    {% endif %}
+  <div class="container">
+
+      <div class="row">
+
+          {{image_names}}
+          <hr>
+          {% for image_name in image_names %}
+          <div class="col-lg-3 col-md-3 col-xs-6 thumb">
+              <img class="img-responsive" width="200px" height="200px" src=" {{url_for('main_bp.send_image', filename=image_name)}}">
+          </div>
+          {% endfor %}
+      </div>
   </div>
+
+  <script type="text/javascript" src="{{ url_for('main_bp.static', filename='upload-file.js') }}"></script>
 
 {% endblock %}
