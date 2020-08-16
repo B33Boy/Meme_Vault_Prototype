@@ -20,7 +20,7 @@ def login():
         rendered template of login.html
     """
     if current_user.is_authenticated:
-        return redirect(url_for('main_bp.index'))
+        return redirect(url_for('main_bp.index', username=current_user.username))
 
     form = LoginForm()
 
@@ -38,7 +38,7 @@ def login():
         next_page = request.args.get('next')
 
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('main_bp.index')
+            next_page = url_for('main_bp.index', username=current_user.username)
 
         return redirect(next_page)
 
@@ -71,7 +71,7 @@ def register():
 
     """
     if current_user.is_authenticated:
-        return redirect(url_for('main_bp.index'))
+        return redirect(url_for('main_bp.index', username=current_user.username))
 
     form = RegistrationForm()
 
