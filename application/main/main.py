@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, current_app, request, url_for, redirect, send_from_directory, flash
+from flask import Blueprint, render_template, current_app, request, url_for, redirect, send_from_directory, flash, g
 from flask_login import login_required
 import os
 
@@ -30,6 +30,11 @@ def index():
 @main_bp.route('/upload/<filename>')
 def send_image(filename):
     return send_from_directory("images", filename)
+
+
+@main_bp.route('/<current_user>/<filename>')
+def add_metadata(current_user, filename):
+    return render_template("complete.html", current_user=current_user, filename=filename)
 
 
 @main_bp.route('/about')
@@ -70,7 +75,6 @@ def upload():
 
         else:
             # request.files.clear()
-
             flash('Invalid file format', category='danger')
 
     return redirect(url_for('main_bp.index'))

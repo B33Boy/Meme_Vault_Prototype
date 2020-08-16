@@ -33,13 +33,14 @@
         <hr>
         {% for image_name in image_names %}
         <div class="col-lg-3 col-md-3 col-xs-6 thumb">
-            <!-- <a href="{{url_for('main_bp.send_image', filename=image_name)}}"> -->
-            <img class="img-responsive" width="200px" height="200px" src=" {{url_for('main_bp.send_image', filename=image_name)}}">
-            <!-- </a> -->
+            <a href="{{url_for('main_bp.add_metadata', current_user=current_user, filename=image_name)}}">
+              <img class="img-responsive" width="200px" height="200px" src=" {{ url_for('main_bp.send_image', filename=image_name) }}">
+            </a>
         </div>
         {% endfor %}
     </div>
   </div>
+
 
 {% endblock %}
 
