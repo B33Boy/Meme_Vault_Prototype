@@ -73,10 +73,7 @@ def upload():
 
             flash('Invalid file format', category='danger')
 
-
-
     return redirect(url_for('main_bp.index'))
-
 
 
 @main_bp.app_errorhandler(404)
