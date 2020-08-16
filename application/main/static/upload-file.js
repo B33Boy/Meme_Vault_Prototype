@@ -1,8 +1,4 @@
-  alert("Before document ready");
-
 $(document).ready(function(){
-
-  alert("TEST");
 
     $("#formButton").click(function(){
       $(this).hide();
