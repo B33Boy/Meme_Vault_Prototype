@@ -41,11 +41,15 @@
     </div>
   </div>
 
+  <p>If you click on the "Hide" button, I will disappear.</p>
+
+  <button id="hide">Hide</button>
+  <button id="show">Show</button>
 
 {% endblock %}
 
 
 {% block javascript %}
   {{ super() }}
-  <script type="text/javascript" src="{{ url_for('main_bp.static', filename='upload-file.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='main/upload-file.js') }}"></script>
 {% endblock %}

@@ -7,7 +7,7 @@ from .forms import MetadataForm
 
 
 main_bp = Blueprint('main_bp', __name__,
-                    template_folder='templates', static_folder='static', static_url_path='')
+                    template_folder='templates')
 
 
 

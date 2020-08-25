@@ -7,7 +7,7 @@ from ..main.models import User
 from app import db
 
 login_bp = Blueprint('login_bp', __name__,
-                     template_folder='templates', static_folder='static')
+                     template_folder='templates')
 
 
 @login_bp.route('/login', methods=['GET', 'POST'])
