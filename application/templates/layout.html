@@ -7,7 +7,9 @@
 
   <div class="container">
       {% include "navbar.html" %}
-      {% block page_content %}{% endblock %}
+      <div class="jumbotron">
+        {% block page_content %}{% endblock %}
+      </div>
   </div>
 
   <hr>

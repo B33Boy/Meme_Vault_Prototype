@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, current_app, request, url_for, redirect, send_from_directory, flash
+from flask import Blueprint, render_template, current_app, request, url_for, redirect, send_from_directory, flash, jsonify, session
 from flask_login import login_required, current_user
 import os
 
@@ -13,7 +13,6 @@ main_bp = Blueprint('main_bp', __name__,
 
 @main_bp.route('/')
 def home():
-    
     return redirect(url_for('login_bp.login'))
 
 
@@ -37,16 +36,43 @@ def send_image(filename):
     return send_from_directory("images", filename)
 
 
-@main_bp.route('/<username>/<filename>')
+@main_bp.route('/process', methods=['POST'])
+def process_metadata_form():
+    
+    parsed_inputs = []
+    
+    data = request.get_json()
+
+    for inp in data:
+        inp = inp.strip()
+
+        if inp == "":
+            return jsonify({'error': 'One or more Fields are Empty!'})
+
+        parsed_inputs.append(inp)
+
+    session['inputs'] = parsed_inputs
+    user = session['user']
+    filename = session['filename']
+    
+    # return jsonify(parsed_inputs)
+
+
+    return redirect(url_for('main_bp.add_metadata', username=user, filename=filename))
+
+
+@main_bp.route('/<username>/<filename>', methods=['GET', 'POST'])
 def add_metadata(username, filename):
-    user = User.query.filter_by(username=username).first_or_404()
+    user = current_user.username
 
-    form = MetadataForm()
+    session['user'] = user
+    session['filename'] = filename
 
-    if form.validate_on_submit():
-        pass
+    prev = ['Blue', 'Sokka', 'Grumpy']
+    
+    inps = session.pop('inputs', None)
 
-    return render_template("complete.html", user=user, filename=filename, form=form)
+    return render_template("complete.html", user=user, filename=filename, prev=prev, inps=inps)
 
 
 @main_bp.route('/about')
@@ -65,8 +91,7 @@ def about():
 @main_bp.route('/upload', methods=['POST'])
 def upload():
     """
-
-
+    
     """
     target = os.path.join(current_app.config['BASEDIR'], 'images/').replace("\\","/")
     print(target)
