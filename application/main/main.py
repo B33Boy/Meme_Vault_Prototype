@@ -36,41 +36,54 @@ def send_image(filename):
     return send_from_directory("images", filename)
 
 
-@main_bp.route('/process', methods=['POST'])
-def process_metadata_form():
+# @main_bp.route('/process', methods=['GET', 'POST'])
+# def process_metadata_form():
     
-    parsed_inputs = []
+#     parsed_inputs = []
     
-    data = request.get_json()
+#     data = request.get_json()
 
-    for inp in data:
-        inp = inp.strip()
+#     for inp in data:
+#         inp = inp.strip()
 
-        if inp == "":
-            return jsonify({'error': 'One or more Fields are Empty!'})
+#         if inp == "":
+#             return jsonify({'error': 'One or more Fields are Empty!'})
 
-        parsed_inputs.append(inp)
+#         parsed_inputs.append(inp)
 
-    session['inputs'] = parsed_inputs
-    user = session['user']
-    filename = session['filename']
+#     session['inputs'] = parsed_inputs
+#     user = session['user']
+#     filename = session['filename']
     
-    # return jsonify(parsed_inputs)
+#     print('parsed_inputs: ', parsed_inputs)
+#     print('user:', user)
+#     print('filename:', filename)
 
-
-    return redirect(url_for('main_bp.add_metadata', username=user, filename=filename))
+#     return redirect(url_for('main_bp.add_metadata', username=user, filename=filename, inps=parsed_inputs))
 
 
 @main_bp.route('/<username>/<filename>', methods=['GET', 'POST'])
-def add_metadata(username, filename):
+def add_metadata(username, filename, inps=[]):
     user = current_user.username
 
-    session['user'] = user
-    session['filename'] = filename
-
     prev = ['Blue', 'Sokka', 'Grumpy']
-    
-    inps = session.pop('inputs', None)
+
+    if request.method == 'POST':
+        prev = []
+
+        f = request.form        
+        for key in f.keys():
+            for value in f.getlist(key):
+                value = value.strip()
+
+                if value == '' or value == None:
+                    flash('Empty value in field', category='danger')
+                else:
+                    prev.append(value)
+
+
+    # if request.method == 'POST':
+    # prev = session.pop('inputs', None)
 
     return render_template("complete.html", user=user, filename=filename, prev=prev, inps=inps)
 
