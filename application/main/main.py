@@ -36,32 +36,6 @@ def send_image(filename):
     return send_from_directory("images", filename)
 
 
-# @main_bp.route('/process', methods=['GET', 'POST'])
-# def process_metadata_form():
-    
-#     parsed_inputs = []
-    
-#     data = request.get_json()
-
-#     for inp in data:
-#         inp = inp.strip()
-
-#         if inp == "":
-#             return jsonify({'error': 'One or more Fields are Empty!'})
-
-#         parsed_inputs.append(inp)
-
-#     session['inputs'] = parsed_inputs
-#     user = session['user']
-#     filename = session['filename']
-    
-#     print('parsed_inputs: ', parsed_inputs)
-#     print('user:', user)
-#     print('filename:', filename)
-
-#     return redirect(url_for('main_bp.add_metadata', username=user, filename=filename, inps=parsed_inputs))
-
-
 @main_bp.route('/<username>/<filename>', methods=['GET', 'POST'])
 def add_metadata(username, filename, inps=[]):
     user = current_user.username

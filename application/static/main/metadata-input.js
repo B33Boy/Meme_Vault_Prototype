@@ -27,34 +27,6 @@ $(document).ready(function(){
         $(this).closest('#inputFormRow').remove();
     });
 
-
-    // $('form').on('submit', function(event){
-
-    //     var inp_data = [];
-    //     $('.form-control').each(function(){
-    //         inp_data.push($(this).val());
-    //         console.log($(this).val());            
-    //     });
-
-    //     event.preventDefault();
-
-    //     $.ajax({
-    //         type : 'POST',
-    //         url : '/process',
-    //         data: JSON.stringify(inp_data),
-    //         contentType: 'application/json'
-
-    //     }).done(function(data){
-    //         if (data.error){
-    //             $('#errorAlert').text(data.error).show();
-    //         }
-    //         else{
-    //             $('#errorAlert').text(data.error).hide();
-    //         }
-    //     });
-        
-    // });
-
 });
 
 
