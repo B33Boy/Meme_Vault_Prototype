@@ -16,36 +16,29 @@
     {% endif %}
   </div>
 
-  {% if post %}
-    {% for post in posts %}
+  
+  {% if posts %}
+    {% for post in posts %}Bee
       <div>
-        <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
+        <p>{{ post.image_url }} <b>{{ post.body }}</b></p>
       </div>
     {% endfor %}
   {% endif %}
+  
 
+  <br>
+  <div class="row">
 
-  <div class="container">
-
-    <div class="row">
-
-        {{image_names}}
-        <hr>
-        {% for image_name in image_names %}
-        <div class="col-lg-3 col-md-3 col-xs-6 thumb">
-            <a href="{{url_for('main_bp.add_metadata', username=current_user.username, filename=image_name)}}">
-              <img class="img-responsive" width="200px" height="200px" src=" {{ url_for('main_bp.send_image', filename=image_name) }}">
-            </a>
-        </div>
-        {% endfor %}
+      <hr>
+      {% for image_name in image_names %}
+      <div class="col-lg-3 col-md-3 col-xs-6 thumb">
+          <a href="{{url_for('main_bp.add_metadata', username=current_user.username, filename=image_name)}}">
+            <img class="img-responsive" width="200px" height="200px" src=" {{ url_for('main_bp.send_image', filename=image_name) }}">
+          </a>
+      </div>
+      {% endfor %}
     </div>
-  </div>
-
-  <p>If you click on the "Hide" button, I will disappear.</p>
-
-  <button id="hide">Hide</button>
-  <button id="show">Show</button>
-
+ 
 {% endblock %}
 
 

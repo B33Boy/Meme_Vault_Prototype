@@ -2,13 +2,13 @@ from flask import Blueprint, render_template, current_app, request, url_for, red
 from flask_login import login_required, current_user
 import os
 
-from ..main.models import User
+from ..main.models import User, Post, get_posts_by_user, add_post_for_user
 from .forms import MetadataForm
+from .ocr import gen_description
 
 
 main_bp = Blueprint('main_bp', __name__,
                     template_folder='templates')
-
 
 
 @main_bp.route('/')
@@ -22,9 +22,11 @@ def index(username):
 
     user = User.query.filter_by(username=username).first_or_404()
 
-    posts = [{
-    }]
+    # posts = Post.query.filter_by(username=username).all_or_404()
 
+    posts = get_posts_by_user(user.username)
+
+    # Send image names to html for rendering
     target = os.path.join(current_app.config['BASEDIR'], 'images/').replace("\\","/")
     image_names = os.listdir(target)
 
@@ -81,7 +83,7 @@ def upload():
     
     """
     target = os.path.join(current_app.config['BASEDIR'], 'images/').replace("\\","/")
-    print(target)
+    print('target:',target)
 
     if not os.path.isdir(target):
         os.mkdir(target)
@@ -92,10 +94,12 @@ def upload():
         ext = os.path.splitext(filename)[1].lower()
 
         if ext in current_app.config['EXT']:
-        # if (ext == ".jpg") or (ext == ".png"):
             print("File supported moving on...")
             dest = '/'.join([target, filename])
             file.save(dest)
+
+            add_post_for_user(current_user.username, dest)
+
 
         else:
             # request.files.clear()

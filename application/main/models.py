@@ -39,7 +39,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    Posts = db.relationship('Post', backref='author', lazy='dynamic')
+    Posts = db.relationship('Post', backref='author')#, lazy='dynamic')
 
     def set_password(self, password):
         """hashes unhashed password.
@@ -92,6 +92,8 @@ class Post(db.Model):
     ----------
     id : db.Column
         int id
+    image_url : db.Column
+        string url
     body : db.Column
         string body
     user_id : db.Column
@@ -99,9 +101,10 @@ class Post(db.Model):
 
     """
     id = db.Column(db.Integer, primary_key=True)
+    image_url = db.Column(db.String(200), nullable=False)
     body = db.Column(db.String(140))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
+    
     def __repr__(self):
         """Allows object of type Post to be printed.
 
@@ -112,3 +115,17 @@ class Post(db.Model):
 
         """
         return '<Post {}>'.format(self.body)
+
+
+
+def get_posts_by_user(username):
+    print("GETTING POSTS BY CUSTOMER")
+    return Post.query.filter_by(user_id=username).all()
+
+
+
+def add_post_for_user(username, filepath):
+
+    post = Post(image_url=filepath, body='BODY', user_id=username)
+    db.session.add(post)
+    db.session.commit()

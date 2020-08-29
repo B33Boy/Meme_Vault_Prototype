@@ -3,8 +3,6 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, EqualTo
 from wtforms.widgets import TextArea
 
-
-
 from ..main.models import User
 
 
