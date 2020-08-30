@@ -1,6 +1,8 @@
-from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+
+from app import db, login
+from .ocr import gen_description
 
 
 @login.user_loader
@@ -114,8 +116,7 @@ class Post(db.Model):
             the body field of the post
 
         """
-        return '<Post {}>'.format(self.body)
-
+        return '<Post {}>'.format(self.image_url)
 
 
 def get_posts_by_user(username):
@@ -123,9 +124,20 @@ def get_posts_by_user(username):
     return Post.query.filter_by(user_id=username).all()
 
 
-
 def add_post_for_user(username, filepath):
-
-    post = Post(image_url=filepath, body='BODY', user_id=username)
+    desc = gen_description(filepath)
+    post = Post(image_url=filepath, body=desc, user_id=username)
     db.session.add(post)
     db.session.commit()
+    
+def delete_post_for_user(username, filepath):
+    # user_id = User.query.filter_by(username=username).first()
+    
+    # user_id = user_id.id
+
+    print("FILEPATH", filepath)
+    post = Post.query.filter_by(user_id=username, image_url=filepath).first()
+    db.session.delete(post)
+    db.session.commit()
+
+    

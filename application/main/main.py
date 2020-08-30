@@ -2,9 +2,7 @@ from flask import Blueprint, render_template, current_app, request, url_for, red
 from flask_login import login_required, current_user
 import os
 
-from ..main.models import User, Post, get_posts_by_user, add_post_for_user
-from .forms import MetadataForm
-from .ocr import gen_description
+from ..main.models import User, Post, get_posts_by_user, add_post_for_user, delete_post_for_user
 
 
 main_bp = Blueprint('main_bp', __name__,
@@ -27,7 +25,13 @@ def index(username):
     posts = get_posts_by_user(user.username)
 
     # Send image names to html for rendering
-    target = os.path.join(current_app.config['BASEDIR'], 'images/').replace("\\","/")
+    target = os.path.join(current_app.config['BASEDIR'], 'images/{}'.format(current_user.username)).replace("\\","/")
+    print("TARGET: ", target)
+    
+    # Make sure the listdirectory is created
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    
     image_names = os.listdir(target)
 
     return render_template("main.html", user=user, title='Home Page', posts=posts, image_names=image_names)
@@ -35,7 +39,7 @@ def index(username):
 
 @main_bp.route('/upload/<filename>')
 def send_image(filename):
-    return send_from_directory("images", filename)
+    return send_from_directory("images/{}".format(current_user.username), filename)
 
 
 @main_bp.route('/<username>/<filename>', methods=['GET', 'POST'])
@@ -51,7 +55,7 @@ def add_metadata(username, filename, inps=[]):
         for key in f.keys():
             for value in f.getlist(key):
                 value = value.strip()
-
+                print("FORM VALUE: ", value)
                 if value == '' or value == None:
                     flash('Empty value in field', category='danger')
                 else:
@@ -62,6 +66,22 @@ def add_metadata(username, filename, inps=[]):
     # prev = session.pop('inputs', None)
 
     return render_template("complete.html", user=user, filename=filename, prev=prev, inps=inps)
+
+@main_bp.route('/<username>/<filename>/delete', methods=['POST'])
+def delete_post(username, filename):
+
+    # Get filepath
+    target = os.path.join(current_app.config['BASEDIR'], 'images/{}'.format(current_user.username)).replace("\\","/")
+    filepath = '/'.join([target, filename])
+    
+    # Delete from database
+    delete_post_for_user(username=username, filepath=filepath)
+    
+    # delete the file
+    os.remove(filepath)
+    flash('Deleted File {filename}'.format(filename), category='danger')
+    
+    return redirect(url_for('main_bp.index', username=username))
 
 
 @main_bp.route('/about')
@@ -82,7 +102,7 @@ def upload():
     """
     
     """
-    target = os.path.join(current_app.config['BASEDIR'], 'images/').replace("\\","/")
+    target = os.path.join(current_app.config['BASEDIR'], 'images/{}'.format(current_user.username)).replace("\\","/")
     print('target:',target)
 
     if not os.path.isdir(target):

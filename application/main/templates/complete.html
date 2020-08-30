@@ -50,10 +50,20 @@
 
 				<button class="btn btn-primary" type="submit">Submit form</button>
 			</div>
-			
 		</form>
 	</div>	
+
+	<br>
+	<div class="row">
+		<form name = "deleteForm" method="post" action="{{ url_for('main_bp.delete_post', filename=filename, username=user) }}" style="display: block; margin-left: auto; margin-right: auto;">
+			<button id="removeRow" type="submit" class="btn btn-danger">Delete Image</button>
+		</form>
+	</div>
+
+
 {% endblock %}
+
+
 
 {% block javascript %}
   {{ super() }}
