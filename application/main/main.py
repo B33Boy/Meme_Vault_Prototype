@@ -25,7 +25,7 @@ def index(username):
     posts = get_posts_by_user(user.username)
 
     # Send image names to html for rendering
-    target = os.path.join(current_app.config['BASEDIR'], 'images/{}'.format(current_user.username)).replace("\\","/")
+    target = os.path.join(current_app.config['BASEDIR'], 'images/{}'.format(current_user.username)).replace("\\","/") 
     print("TARGET: ", target)
     
     # Make sure the listdirectory is created
@@ -79,7 +79,7 @@ def delete_post(username, filename):
     
     # delete the file
     os.remove(filepath)
-    flash('Deleted File {filename}'.format(filename), category='danger')
+    flash('Deleted File {}'.format(filename), category='danger')
     
     return redirect(url_for('main_bp.index', username=username))
 
